@@ -4,10 +4,18 @@
 
 package frc.robot.subsystems;
 
+import com.swervedrivespecialties.swervelib.SwerveModule;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drivetrain.DriveDirection;
 
 public class Drivetrain extends SubsystemBase {
+  
+  private final SwerveModule m_frontLeftModule;
+  private final SwerveModule m_frontRightModule;
+  private final SwerveModule m_backLeftModule;
+  private final SwerveModule m_backRightModule;
+
   /** Creates a new ExampleSubsystem. */
   public Drivetrain() {}
 
@@ -19,16 +27,5 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
-  }
-
-  public static DriveDirection getMovementFieldCentric(DriveDirection in) {
-    double fwd = in.getFwd();
-    double str = in.getStr();
-    double rot = in.getRot();
-    
-    double fwdOut = ((fwd * Math.cos(rot)) + (str * Math.sin(rot)));
-    double strOut = ((str * Math.cos(rot)) - (fwd * Math.sin(rot)));
-
-    return new DriveDirection(fwdOut, strOut, 0);
   }
 }

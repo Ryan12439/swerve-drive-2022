@@ -9,20 +9,29 @@ public class DriveDirection {
         this.rot = rot;
     }
 
-    public double getFwd() {
+    public double GetFwd() {
         return fwd;
     }
 
-    public double getStr() {
+    public double GetStr() {
         return str;
     }
 
-    public double getRot() {
+    public double GetRot() {
         return rot;
     }
 
-    public double[] get() {
+    public double[] Get() {
         double[] out = {fwd, str, rot};
         return out;
+    }
+
+    public void Zero() {
+        double fwdOut = ((fwd * Math.cos(rot)) + (str * Math.sin(rot)));
+        double strOut = ((str * Math.cos(rot)) - (fwd * Math.sin(rot)));
+    
+        fwd = fwdOut;
+        str = strOut;
+        rot = 0;
     }
 }

@@ -1,37 +1,71 @@
 package frc.robot.subsystems.drivetrain;
 
-public class DriveDirection {
-    private double fwd, str, rot;
+import static frc.robot.Constants.*;
 
-    public DriveDirection(double fwd, double str, double rot) {
+public class DriveDirection {
+    private double fwd, str, rot, facing;
+
+    public DriveDirection(double fwd, double str, double rot, double facing) {
+        double max = Math.max(Math.max(fwd, str), rot);
+        if (max > 1) {
+            fwd /= max;
+            str /= max;
+            rot /= max;
+        }
+        
         this.fwd = fwd;
         this.str = str;
         this.rot = rot;
+        this.facing = facing;
     }
 
-    public double GetFwd() {
+    public DriveDirection(double fwd, double str, double rot, double facing, boolean metersPerSecond) {
+        if (metersPerSecond) {
+            fwd /= MAX_VELOCITY_METERS_PER_SECOND;
+            str /= MAX_VELOCITY_METERS_PER_SECOND;
+            rot /= MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+        }
+
+        double max = Math.max(Math.max(fwd, str), rot);
+        if (max > 1) {
+            fwd /= max;
+            str /= max;
+            rot /= max;
+        }
+
+        this.fwd = fwd;
+        this.str = str;
+        this.rot = rot;
+        this.facing = facing;
+    }
+
+    public double getFwd() {
         return fwd;
     }
 
-    public double GetStr() {
+    public double getStr() {
         return str;
     }
 
-    public double GetRot() {
+    public double getRot() {
         return rot;
     }
 
-    public double[] Get() {
-        double[] out = {fwd, str, rot};
+    public double getFacing() {
+        return facing;
+    }
+
+    public double[] get() {
+        double[] out = {fwd, str, rot, facing};
         return out;
     }
 
-    public void Zero() {
-        double fwdOut = ((fwd * Math.cos(rot)) + (str * Math.sin(rot)));
-        double strOut = ((str * Math.cos(rot)) - (fwd * Math.sin(rot)));
+    public void zero() {
+        double fwdOut = ((fwd * Math.cos(facing)) + (str * Math.sin(facing)));
+        double strOut = ((str * Math.cos(facing)) - (fwd * Math.sin(facing)));
     
         fwd = fwdOut;
         str = strOut;
-        rot = 0;
+        facing = 0;
     }
 }

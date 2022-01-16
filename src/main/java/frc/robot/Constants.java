@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -68,4 +70,12 @@ public final class Constants {
     public static final double FR_STEER_OFFSET = -Math.toRadians(7.294922+1);
     public static final double BL_STEER_OFFSET = -Math.toRadians(290.214844+0.25);
     public static final double BR_STEER_OFFSET = -Math.toRadians(225.263672+0.75);
+
+    // Max
+    public static final double MAX_VOLTAGE = 12.0;
+    public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
+        SdsModuleConfigurations.MK4_L2.getDriveReduction() *
+        SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
+    public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
+        Math.hypot(DRIVETRAIN_WIDTH_METERS / 2.0, DRIVETRAIN_LENGTH_METERS / 2.0);
 }

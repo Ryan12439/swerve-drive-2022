@@ -13,9 +13,9 @@ public class WheelsState {
      * @param in DriveDirection object containing the movement and rotation that you want
      */
     public WheelsState(DriveDirection in) {
-        double fwd = in.GetFwd();
-        double str = in.GetStr();;
-        double rot = in.GetRot();
+        double fwd = in.getFwd();
+        double str = in.getStr();;
+        double rot = in.getRot();
 
         double a = str - rot * (DRIVETRAIN_LENGTH_METERS / DRIVETRAIN_DIAMETER);
         double b = str + rot * (DRIVETRAIN_LENGTH_METERS / DRIVETRAIN_DIAMETER);
@@ -49,7 +49,7 @@ public class WheelsState {
      * 
      * @return Double List, in order of FR, FL, BR, BL
      */
-    public double[] GetAngles() {
+    public double[] getAngles() {
         double[] out = {waFR, waFL, waBR, waBL};
         return out;
     }
@@ -59,58 +59,28 @@ public class WheelsState {
      * 
      * @return Double List, in order of FR, FL, BR, BL
      */
-    public double[] GetSpeeds() {
+    public double[] getSpeeds() {
         double[] out= {wsFR, wsFL, wsBR, wsBL};
         return out;
     }
 
-    /**
-     * Optimizes wheel positioning baised on current wheel postion, to minimize the amount of motion.
-     * 
-     * @param in WheelsState object containing current position.
-     */
-    // public void Optimize(WheelsState in) {
-    //     double current = in.GetAngles()[0];
-    //     if (Math.abs(waFR - current) > 180) {
-    //         waFR = Math.abs(waFR - 180);
-    //         wsFR = -wsFR;
-    //     }
 
-    //     current = in.GetAngles()[1];
-    //     if (Math.abs(waFL - current) > 180) {
-    //         waFL = Math.abs(waFL - 180);
-    //         wsFL = -wsFL;
-    //     }
-
-    //     current = in.GetAngles()[2];
-    //     if (Math.abs(waBR - current) > 180) {
-    //         waBR = Math.abs(waBR - 180);
-    //         wsBR = -wsBR;
-    //     }
-
-    //     current = in.GetAngles()[3];
-    //     if (Math.abs(waBL - current) > 180) {
-    //         waBL = Math.abs(waBL - 180);
-    //         wsBL = -wsBL;
-    //     }
-    // }
-
-    public double[] GetFR() {
+    public double[] getFR() {
         double[] out = {wsFR, waFR};
         return out;
     }
 
-    public double[] GetFL() {
+    public double[] getFL() {
         double[] out = {wsFL, waFL};
         return out;
     }
 
-    public double[] GetBR() {
+    public double[] getBR() {
         double[] out = {wsBR, waBR};
         return out;
     }
 
-    public double[] GetBL() {
+    public double[] getBL() {
         double[] out = {wsBL, waBL};
         return out;
     }

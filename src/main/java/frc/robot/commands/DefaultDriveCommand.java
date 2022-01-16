@@ -20,6 +20,7 @@ public class DefaultDriveCommand extends CommandBase {
   private final DoubleSupplier strSupplier;
   private final DoubleSupplier rotSupplier;
   private DriveDirection driveDir;
+  private WheelsState wheelsState;
 
   /**
    * Creates a new ExampleCommand.
@@ -51,9 +52,10 @@ public class DefaultDriveCommand extends CommandBase {
 
     driveDir.zero();
 
-    drivetrain.update(
-      new WheelsState(driveDir)
-    );
+    wheelsState = new WheelsState(driveDir);
+    wheelsState.optimizePos(drivetrain.getPos());
+
+    drivetrain.update(wheelsState);
   }
 
   // Called once the command ends or is interrupted.

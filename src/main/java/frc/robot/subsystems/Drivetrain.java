@@ -90,6 +90,15 @@ public class Drivetrain extends SubsystemBase {
     wheelsCurrent = in;
   }
 
+  public WheelsState getPos() {
+    double fr = m_frontRightModule.getSteerAngle();
+    double fl = m_frontLeftModule.getSteerAngle();
+    double br = m_backRightModule.getSteerAngle();
+    double bl = m_backLeftModule.getSteerAngle();
+
+    return new WheelsState(fr, fl, br, bl);
+  }
+
   @Override
   public void periodic() {
     double[] speeds = wheelsCurrent.getSpeeds();

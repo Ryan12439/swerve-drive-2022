@@ -44,6 +44,18 @@ public class WheelsState {
         }
     }
 
+    public WheelsState(double waFR, double waFL, double waBR, double waBL) {
+        this.waFL = waFL;
+        this.waFR = waFR;
+        this.waBL = waBL;
+        this.waBR = waBR;
+
+        wsFR = 0;
+        wsFL = 0;
+        wsBR = 0;
+        wsBL = 0;
+    }
+
     /**
      * Gets the angles of a WheelsState object.
      * 
@@ -83,6 +95,35 @@ public class WheelsState {
     public double[] getBL() {
         double[] out = {wsBL, waBL};
         return out;
+    }
+
+    public void optimizePos(WheelsState in) {
+        double[] angles = in.getAngles();
+
+        if (Math.toDegrees(Math.abs(angles[0] - waFR)) > 90) {
+            waFR = floatMod(waFR - 180, 180);
+            wsFR = -wsFR;
+        }
+
+        if (Math.toDegrees(Math.abs(angles[1] - waFL)) > 90) {
+            waFL = floatMod(waFL - 180, 180);
+            wsFL = -wsFL;
+        }
+
+        if (Math.toDegrees(Math.abs(angles[2] - waBR)) > 90) {
+            waBR = floatMod(waBR - 180, 180);
+            wsBR = -wsBR;
+        }
+
+        if (Math.toDegrees(Math.abs(angles[3] - waBL)) > 90) {
+            waBL = floatMod(waBL - 180, 180);
+            wsBL = - wsBL;
+        }
+    }
+
+    private double floatMod(double x, double y){
+        // x mod y behaving the same way as Math.floorMod but with doubles
+        return (x - Math.floor(x/y) * y);
     }
 }
 

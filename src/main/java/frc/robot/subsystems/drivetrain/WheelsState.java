@@ -69,31 +69,31 @@ public class WheelsState {
      * 
      * @param in WheelsState object containing current position.
      */
-    public void Optimize(WheelsState in) {
-        double current = in.GetAngles()[0];
-        if (Math.abs(waFR - current) > 180) {
-            waFR = Math.abs(waFR - 180);
-            wsFR = -wsFR;
-        }
+    // public void Optimize(WheelsState in) {
+    //     double current = in.GetAngles()[0];
+    //     if (Math.abs(waFR - current) > 180) {
+    //         waFR = Math.abs(waFR - 180);
+    //         wsFR = -wsFR;
+    //     }
 
-        current = in.GetAngles()[1];
-        if (Math.abs(waFL - current) > 180) {
-            waFL = Math.abs(waFL - 180);
-            wsFL = -wsFL;
-        }
+    //     current = in.GetAngles()[1];
+    //     if (Math.abs(waFL - current) > 180) {
+    //         waFL = Math.abs(waFL - 180);
+    //         wsFL = -wsFL;
+    //     }
 
-        current = in.GetAngles()[2];
-        if (Math.abs(waBR - current) > 180) {
-            waBR = Math.abs(waBR - 180);
-            wsBR = -wsBR;
-        }
+    //     current = in.GetAngles()[2];
+    //     if (Math.abs(waBR - current) > 180) {
+    //         waBR = Math.abs(waBR - 180);
+    //         wsBR = -wsBR;
+    //     }
 
-        current = in.GetAngles()[3];
-        if (Math.abs(waBL - current) > 180) {
-            waBL = Math.abs(waBL - 180);
-            wsBL = -wsBL;
-        }
-    }
+    //     current = in.GetAngles()[3];
+    //     if (Math.abs(waBL - current) > 180) {
+    //         waBL = Math.abs(waBL - 180);
+    //         wsBL = -wsBL;
+    //     }
+    // }
 
     public double[] GetFR() {
         double[] out = {wsFR, waFR};

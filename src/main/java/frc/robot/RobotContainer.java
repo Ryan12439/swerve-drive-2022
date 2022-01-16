@@ -10,6 +10,7 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
 
+import static frc.robot.Constants.*;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -18,13 +19,22 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Drivetrain m_exampleSubsystem = new Drivetrain();
+  private final Drivetrain m_drivetrain = new Drivetrain();
+  private final XboxController m_controller = new XboxController(0);
 
-  private final DefaultDriveCommand m_autoCommand = new DefaultDriveCommand(m_exampleSubsystem, null, null, null);
+  private final DefaultDriveCommand m_autoCommand = null;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the button bindings
+    m_drivetrain.setDefaultCommand(    
+      new DefaultDriveCommand(
+        m_drivetrain, 
+        () -> deadband(m_controller.getLeftY(), CONTROLLER_DEADBAND), 
+        () -> deadband(m_controller.getLeftX(), CONTROLLER_DEADBAND), 
+        () -> deadband(m_controller.getRightX(), CONTROLLER_DEADBAND)
+      )
+    );
+
     configureButtonBindings();
   }
 
@@ -45,4 +55,17 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
   }
+
+  private static double deadband(double value, double deadband) {
+    if (Math.abs(value) > deadband) {
+      if (value > 0.0) {
+        return (value - deadband) / (1.0 - deadband);
+      } else {
+        return (value + deadband) / (1.0 - deadband);
+      }
+    } else {
+      return 0.0;
+    }
+  }
 }
+

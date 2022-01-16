@@ -21,7 +21,7 @@ import static frc.robot.Constants.*;
 
 public class Drivetrain extends SubsystemBase {
   private final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200);
-  
+
   private final SwerveModule m_frontLeftModule;
   private final SwerveModule m_frontRightModule;
   private final SwerveModule m_backLeftModule;
@@ -83,7 +83,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getGyro() {
-    return (m_navx.getYaw());
+    return (m_navx.getAngle());
   }
 
   public void update(WheelsState in) {

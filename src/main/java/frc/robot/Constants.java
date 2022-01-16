@@ -78,4 +78,8 @@ public final class Constants {
         SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
         Math.hypot(DRIVETRAIN_WIDTH_METERS / 2.0, DRIVETRAIN_LENGTH_METERS / 2.0);
+
+
+    // Controller settings
+    public static final double CONTROLLER_DEADBAND = 0.1;
 }

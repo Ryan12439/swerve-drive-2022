@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -13,6 +15,22 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    /**
+     * The left-to-right distance between the drivetrain wheels
+     *
+     * Should be measured from center to center.
+     */
+    public static final double DRIVETRAIN_WIDTH_METERS = Units.inchesToMeters(9.25)*2; // FIXME Measure and set trackwidth
+    /**
+     * The front-to-back distance between the drivetrain wheels.
+     *
+     * Should be measured from center to center.
+     */
+    public static final double DRIVETRAIN_LENGTH_METERS = Units.inchesToMeters(9.25)*2; // FIXME Measure and set wheelbase
+
+    // Calculate Ratio
+    public static final double DRIVETRAIN_DIAMETER = Math.sqrt((DRIVETRAIN_LENGTH_METERS * DRIVETRAIN_LENGTH_METERS) + (DRIVETRAIN_WIDTH_METERS * DRIVETRAIN_WIDTH_METERS));
+
     // CAN Bus IDs
 
     // Front Left Drive Motor

@@ -7,6 +7,11 @@ public class WheelsState {
     private double wsFR, wsFL, wsBR, wsBL;
     private double waFR, waFL, waBR, waBL;
 
+    /**
+     * Creates a WheelsState object containing the positions and speeds of each wheel from a DriveDirection object.
+     * 
+     * @param in DriveDirection object containing the movement and rotation that you want
+     */
     public WheelsState(DriveDirection in) {
         double fwd = in.getFwd();
         double str = in.getStr();;
@@ -39,7 +44,12 @@ public class WheelsState {
         }
     }
 
-    // public void Optimize(WheelsState in) {
+    public double[] GetAngles() {
+        double[] out = {waFR, waFL, waBR, waBL};
+        return out;
+    }
+
+    public void Optimize(WheelsState in) {
         
-    // }
+    }
 }

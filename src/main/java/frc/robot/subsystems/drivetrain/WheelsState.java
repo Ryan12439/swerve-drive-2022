@@ -101,23 +101,23 @@ public class WheelsState {
         double[] angles = in.getAngles();
 
         if (Math.toDegrees(Math.abs(angles[0] - waFR)) > 90) {
-            waFR = floatMod(waFR - 180, 180);
+            waFR = Math.toRadians(floatMod(waFR - 180, 180));
             wsFR = -wsFR;
         }
 
         if (Math.toDegrees(Math.abs(angles[1] - waFL)) > 90) {
-            waFL = floatMod(waFL - 180, 180);
+            waFL = Math.toRadians(floatMod(waFL - 180, 180));
             wsFL = -wsFL;
         }
 
         if (Math.toDegrees(Math.abs(angles[2] - waBR)) > 90) {
-            waBR = floatMod(waBR - 180, 180);
+            waBR = Math.toRadians(floatMod(waBR - 180, 180));
             wsBR = -wsBR;
         }
 
         if (Math.toDegrees(Math.abs(angles[3] - waBL)) > 90) {
-            waBL = floatMod(waBL - 180, 180);
-            wsBL = - wsBL;
+            waBL = Math.toRadians(floatMod(waBL - 180, 180));
+            wsBL = -wsBL;
         }
     }
 

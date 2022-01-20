@@ -29,7 +29,7 @@ public class RobotContainer {
     m_drivetrain.setDefaultCommand(    
       new DefaultDriveCommand(
         m_drivetrain, 
-        () -> deadband(m_controller.getLeftY(), CONTROLLER_DEADBAND), 
+        () -> deadband(-m_controller.getLeftY(), CONTROLLER_DEADBAND), 
         () -> deadband(m_controller.getLeftX(), CONTROLLER_DEADBAND), 
         () -> deadband(m_controller.getRightX(), CONTROLLER_DEADBAND)
       )

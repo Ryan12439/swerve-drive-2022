@@ -83,7 +83,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getGyro() {
-    return (m_navx.getAngle());
+    return Math.toRadians(m_navx.getAngle());
   }
 
   public void update(WheelsState in) {

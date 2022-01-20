@@ -3,7 +3,6 @@ package frc.robot.subsystems.drivetrain;
 import static frc.robot.Constants.*;
 
 public class WheelsState {
-    
     private double wsFR, wsFL, wsBR, wsBL;
     private double waFR, waFL, waBR, waBL;
 
@@ -17,10 +16,10 @@ public class WheelsState {
         double str = in.getStr();;
         double rot = in.getRot();
 
-        double b = str - rot * (DRIVETRAIN_LENGTH_METERS / DRIVETRAIN_DIAMETER);
-        double a = str + rot * (DRIVETRAIN_LENGTH_METERS / DRIVETRAIN_DIAMETER);
-        double d = fwd - rot * (DRIVETRAIN_WIDTH_METERS / DRIVETRAIN_DIAMETER);
-        double c = fwd + rot * (DRIVETRAIN_WIDTH_METERS / DRIVETRAIN_DIAMETER);
+        double a = str - rot * (DRIVETRAIN_LENGTH_METERS / DRIVETRAIN_DIAMETER);
+        double b = str + rot * (DRIVETRAIN_LENGTH_METERS / DRIVETRAIN_DIAMETER);
+        double c = fwd - rot * (DRIVETRAIN_WIDTH_METERS / DRIVETRAIN_DIAMETER);
+        double d = fwd + rot * (DRIVETRAIN_WIDTH_METERS / DRIVETRAIN_DIAMETER);
 
         // Get wheel speeds
         wsFR = Math.sqrt((b * b) + (c * c));
@@ -99,31 +98,33 @@ public class WheelsState {
 
     public void optimizePos(WheelsState in) {
         double[] angles = in.getAngles();
+        double[] anglesNew = this.getAngles();
+        double[] speedsNew = this.getSpeeds();
 
-        if (Math.toDegrees(Math.abs(angles[0] - waFR)) > 90) {
-            waFR = Math.toRadians(floatMod(waFR - 180, 180));
-            wsFR = -wsFR;
+        for (int i = 0; i < 4; i++) {
+            angles[i] += Math.PI;
+            anglesNew[i] += Math.PI;
+            
+
+            if (Math.abs(angles[i] - anglesNew[i]) > (Math.PI / 2)) {
+                anglesNew[i] = (anglesNew[i] + Math.PI) % (Math.PI * 2);
+                speedsNew[i] = -speedsNew[i];
+            }
+            
+            anglesNew[i] -= Math.PI;
         }
 
-        if (Math.toDegrees(Math.abs(angles[1] - waFL)) > 90) {
-            waFL = Math.toRadians(floatMod(waFL - 180, 180));
-            wsFL = -wsFL;
-        }
+        waFR = anglesNew[0];
+        wsFR = speedsNew[0];
 
-        if (Math.toDegrees(Math.abs(angles[2] - waBR)) > 90) {
-            waBR = Math.toRadians(floatMod(waBR - 180, 180));
-            wsBR = -wsBR;
-        }
+        waFL = anglesNew[1];
+        wsFL = speedsNew[1];
+        
+        waBR = anglesNew[2];
+        wsBR = speedsNew[2];
 
-        if (Math.toDegrees(Math.abs(angles[3] - waBL)) > 90) {
-            waBL = Math.toRadians(floatMod(waBL - 180, 180));
-            wsBL = -wsBL;
-        }
-    }
-
-    private double floatMod(double x, double y){
-        // x mod y behaving the same way as Math.floorMod but with doubles
-        return (x - Math.floor(x/y) * y);
+        waBL = anglesNew[3];
+        wsBL = speedsNew[3];
     }
 }
 

@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SPI;
-
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.drivetrain.DriveDirection;
+import frc.robot.subsystems.drivetrain.Odemetry;
+import frc.robot.subsystems.drivetrain.Position;
 import frc.robot.subsystems.drivetrain.WheelsState;
 
 import static frc.robot.Constants.*;
@@ -29,11 +31,20 @@ public class Drivetrain extends SubsystemBase {
 
   private WheelsState wheelsCurrent;
 
+  private double speedModifier = 1;
+
+  private Position currentPos;
+  private double timeSinceLastCheck;
+
   /** Creates a new DrivetrainSubsystem. */
   public Drivetrain() {
     wheelsCurrent = new WheelsState(
       new DriveDirection(0, 0, 0, 0)
     );
+
+    currentPos = new Position(0, 0, 0);
+
+    timeSinceLastCheck = Timer.getFPGATimestamp();
 
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
@@ -91,12 +102,49 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public WheelsState getPos() {
-    double fr = m_frontRightModule.getSteerAngle();
-    double fl = m_frontLeftModule.getSteerAngle();
-    double br = m_backRightModule.getSteerAngle();
-    double bl = m_backLeftModule.getSteerAngle();
+    double frA = m_frontRightModule.getSteerAngle();
+    double flA = m_frontLeftModule.getSteerAngle();
+    double brA = m_backRightModule.getSteerAngle();
+    double blA = m_backLeftModule.getSteerAngle();
 
-    return new WheelsState(fr, fl, br, bl);
+    double frS = m_frontRightModule.getDriveVelocity() / MAX_VELOCITY_METERS_PER_SECOND;
+    double flS = m_frontLeftModule.getDriveVelocity() / MAX_VELOCITY_METERS_PER_SECOND;
+    double brS = m_backRightModule.getDriveVelocity() / MAX_VELOCITY_METERS_PER_SECOND;
+    double blS = m_backLeftModule.getDriveVelocity() / MAX_VELOCITY_METERS_PER_SECOND;
+
+    return new WheelsState(frA, flA, brA, blA, frS, flS, brS, blS);
+  }
+
+  public void updateOdo() {
+    double time = Timer.getFPGATimestamp() - timeSinceLastCheck;
+    timeSinceLastCheck = Timer.getFPGATimestamp();
+    double velocity[] = Odemetry.getOdemetry(getPos(), getGyro());
+
+    currentPos.addPos(velocity[1] * time, velocity[0] * time, getGyro());
+  }
+
+  public void zeroGyroscope() {
+    m_navx.zeroYaw();
+  }
+
+  public void decreaseSpeed() {
+    speedModifier /= 1.1;
+    if (speedModifier < 0.1)
+      speedModifier = 0.1;
+  }
+
+  public void increaseSpeed() {
+    speedModifier *= 1.1;
+    if (speedModifier > 1)
+      speedModifier = 1;
+  }
+
+  public void resetSpeed() {
+    speedModifier = 1;
+  }
+
+  public void stopRobot() {
+    speedModifier = 0;
   }
 
   @Override
@@ -104,10 +152,12 @@ public class Drivetrain extends SubsystemBase {
     double[] speeds = wheelsCurrent.getSpeeds();
     double[] angles = wheelsCurrent.getAngles();
 
-    m_frontRightModule.set(speeds[0] * MAX_VOLTAGE, angles[0]);
-    m_frontLeftModule.set(speeds[1] * MAX_VOLTAGE, angles[1]);
-    m_backRightModule.set(speeds[2] * MAX_VOLTAGE, angles[2]);
-    m_backLeftModule.set(speeds[3] * MAX_VOLTAGE, angles[3]);
+    m_frontRightModule.set(speeds[0] * MAX_VOLTAGE * speedModifier, angles[0]);
+    m_frontLeftModule.set(speeds[1] * MAX_VOLTAGE * speedModifier, angles[1]);
+    m_backRightModule.set(speeds[2] * MAX_VOLTAGE * speedModifier, angles[2]);
+    m_backLeftModule.set(speeds[3] * MAX_VOLTAGE * speedModifier, angles[3]);
+
+    updateOdo();
   }
 
   @Override

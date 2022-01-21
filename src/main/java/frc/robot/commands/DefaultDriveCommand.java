@@ -50,10 +50,10 @@ public class DefaultDriveCommand extends CommandBase {
       drivetrain.getGyro()
     );
 
-    //driveDir.zero();
+    driveDir.zero();
 
     wheelsState = new WheelsState(driveDir);
-    //wheelsState.optimizePos(drivetrain.getPos());
+    wheelsState.optimizePos(drivetrain.getPos());
 
     drivetrain.update(wheelsState);
   }

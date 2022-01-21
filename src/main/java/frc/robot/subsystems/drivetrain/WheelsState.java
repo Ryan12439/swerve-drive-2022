@@ -28,10 +28,10 @@ public class WheelsState {
         wsBL = Math.sqrt((a * a) + (d * d));
 
         // Get wheel angles
-        waFR = Math.atan2(b, c);
-        waFL = Math.atan2(b, d);
-        waBR = Math.atan2(a, c);
-        waBL = Math.atan2(a, d);
+        waFR = -Math.atan2(b, c);
+        waFL = -Math.atan2(b, d);
+        waBR = -Math.atan2(a, c);
+        waBL = -Math.atan2(a, d);
 
         // Normalize values to 1 if any are greater than 1
         double wsMAX = Math.max(Math.max(wsFR, wsFL),Math.max(wsBR, wsBL));

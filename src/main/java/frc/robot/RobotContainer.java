@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Button;
 
 import static frc.robot.Constants.*;
 /**
@@ -44,7 +45,16 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    new Button(m_controller::getBackButton)
+            // No requirements because we don't need to interrupt anything
+            .whenPressed(m_drivetrain::zeroGyroscope);
+    
+    new Button(m_controller::getLeftBumper).whenPressed(m_drivetrain::decreaseSpeed);
+    new Button(m_controller::getRightBumper).whenPressed(m_drivetrain::increaseSpeed);
+    new Button(m_controller::getStartButton).whenPressed(m_drivetrain::resetSpeed);
+    new Button(m_controller::getAButton).whenPressed(m_drivetrain::stopRobot);
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

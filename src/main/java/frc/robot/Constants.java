@@ -82,4 +82,7 @@ public final class Constants {
 
     // Controller settings
     public static final double CONTROLLER_DEADBAND = 0.1;
+
+    // Wheel Diameter
+    public static final double WHEEL_DIAMETER = SdsModuleConfigurations.MK4_L2.getWheelDiameter();
 }

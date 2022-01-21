@@ -43,16 +43,16 @@ public class WheelsState {
         }
     }
 
-    public WheelsState(double waFR, double waFL, double waBR, double waBL) {
+    public WheelsState(double waFR, double waFL, double waBR, double waBL, double wsFR, double wsFL, double wsBR, double wsBL) {
         this.waFL = waFL;
         this.waFR = waFR;
         this.waBL = waBL;
         this.waBR = waBR;
 
-        wsFR = 0;
-        wsFL = 0;
-        wsBR = 0;
-        wsBL = 0;
+        this.wsFR = wsFR;
+        this.wsFL = wsFL;
+        this.wsBR = wsBR;
+        this.wsBL = wsBL;
     }
 
     /**

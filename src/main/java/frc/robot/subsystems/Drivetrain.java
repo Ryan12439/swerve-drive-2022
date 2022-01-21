@@ -91,6 +91,9 @@ public class Drivetrain extends SubsystemBase {
       BR_MODULE_SE,
       BR_STEER_OFFSET
     );
+
+    tab.addNumber("X", () -> currentPos.getPos()[0]);
+    tab.addNumber("Y", () -> currentPos.getPos()[1]);
   }
 
   public double getGyro() {
@@ -120,11 +123,12 @@ public class Drivetrain extends SubsystemBase {
     timeSinceLastCheck = Timer.getFPGATimestamp();
     double velocity[] = Odemetry.getOdemetry(getPos(), getGyro());
 
-    currentPos.addPos(velocity[1] * time, velocity[0] * time, getGyro());
+    currentPos.addPos(-velocity[1] * time, -velocity[0] * time, getGyro());
   }
 
   public void zeroGyroscope() {
     m_navx.zeroYaw();
+    currentPos = new Position(0, 0, 0);
   }
 
   public void decreaseSpeed() {

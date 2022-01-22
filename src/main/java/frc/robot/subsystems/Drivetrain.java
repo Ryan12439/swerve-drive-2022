@@ -29,6 +29,8 @@ public class Drivetrain extends SubsystemBase {
   private final SwerveModule m_backLeftModule;
   private final SwerveModule m_backRightModule;
 
+  public ShuffleboardTab tab;
+
   private WheelsState wheelsCurrent;
 
   private double speedModifier = 1;
@@ -46,7 +48,7 @@ public class Drivetrain extends SubsystemBase {
 
     timeSinceLastCheck = Timer.getFPGATimestamp();
 
-    ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+    tab = Shuffleboard.getTab("Drivetrain");
 
     m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
       tab.getLayout("Front Left Module", BuiltInLayouts.kList)
@@ -121,9 +123,11 @@ public class Drivetrain extends SubsystemBase {
   public void updateOdo() {
     double time = Timer.getFPGATimestamp() - timeSinceLastCheck;
     timeSinceLastCheck = Timer.getFPGATimestamp();
-    double velocity[] = Odemetry.getOdemetry(getPos(), getGyro());
+    DriveDirection in = Odemetry.getOdemetry(getPos(), getGyro());
 
-    currentPos.addPos(-velocity[1] * time, -velocity[0] * time, getGyro());
+    in.zero();
+
+    currentPos.addPos(in.getStr() * MAX_VELOCITY_METERS_PER_SECOND * time, in.getFwd() * MAX_VELOCITY_METERS_PER_SECOND * time, getGyro());
   }
 
   public void zeroGyroscope() {

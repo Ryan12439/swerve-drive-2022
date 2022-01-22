@@ -75,7 +75,6 @@ public class WheelsState {
         return out;
     }
 
-
     public double[] getFR() {
         double[] out = {wsFR, waFR};
         return out;
@@ -105,12 +104,15 @@ public class WheelsState {
             angles[i] += Math.PI;
             anglesNew[i] += Math.PI;
             
-
-            if (Math.abs(angles[i] - anglesNew[i]) > (Math.PI / 2)) {
-                anglesNew[i] = (anglesNew[i] + Math.PI) % (Math.PI * 2);
-                speedsNew[i] = -speedsNew[i];
-            }
+            double change = Math.abs(angles[i] - anglesNew[i]);
             
+            if (change > (Math.PI / 2) && change < (Math.PI * 1.5)) {
+                anglesNew[i] = (anglesNew[i] + Math.PI);
+                speedsNew[i] = -speedsNew[i];
+            } else if (change > (Math.PI * 1.5)) {
+                anglesNew[i] += (Math.PI * 2 * ((int)(angles[i] / Math.PI) - 1));
+            }
+
             anglesNew[i] -= Math.PI;
         }
 

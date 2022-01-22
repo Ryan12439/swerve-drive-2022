@@ -37,6 +37,10 @@ public class RobotContainer {
     );
 
     configureButtonBindings();
+
+    m_drivetrain.tab.addNumber("Left stick X", () -> m_controller.getLeftX());
+    m_drivetrain.tab.addNumber("Left stick Y", () -> m_controller.getLeftY());
+    m_drivetrain.tab.addNumber("Right stick X", () -> m_controller.getRightX());
   }
 
   /**

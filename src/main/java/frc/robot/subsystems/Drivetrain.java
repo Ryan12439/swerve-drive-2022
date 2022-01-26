@@ -94,8 +94,8 @@ public class Drivetrain extends SubsystemBase {
       BR_STEER_OFFSET
     );
 
-    tab.addNumber("X", () -> currentPos.getPos()[0]);
-    tab.addNumber("Y", () -> currentPos.getPos()[1]);
+    tab.addNumber("X calc", () -> currentPos.getPos()[0]).withSize(1, 1).withPosition(6, 2);
+    tab.addNumber("Y calc", () -> currentPos.getPos()[1]).withSize(1, 1).withPosition(6, 3);
   }
 
   public double getGyro() {
@@ -127,7 +127,15 @@ public class Drivetrain extends SubsystemBase {
 
     in.zero();
 
-    currentPos.addPos(in.getStr() * MAX_VELOCITY_METERS_PER_SECOND * time, in.getFwd() * MAX_VELOCITY_METERS_PER_SECOND * time, getGyro());
+    currentPos.addPos(
+      -in.getStr() * MAX_VELOCITY_METERS_PER_SECOND * time, 
+      in.getFwd() * MAX_VELOCITY_METERS_PER_SECOND * time, 
+      getGyro()
+    );
+  }
+
+  public Position getPosition() {
+    return currentPos;
   }
 
   public void zeroGyroscope() {
@@ -153,6 +161,11 @@ public class Drivetrain extends SubsystemBase {
 
   public void stopRobot() {
     speedModifier = 0;
+  }
+
+  public void setSpeed(double speed) {
+    if (speed >= 0 && speed <= 1)
+      speedModifier = speed;
   }
 
   @Override

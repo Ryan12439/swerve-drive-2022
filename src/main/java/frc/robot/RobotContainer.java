@@ -7,7 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.GoToCommand;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.drivetrain.Position;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 
@@ -23,24 +25,31 @@ public class RobotContainer {
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final XboxController m_controller = new XboxController(0);
 
-  private final DefaultDriveCommand m_autoCommand = null;
+  private final GoToCommand m_autoCommand = new GoToCommand(m_drivetrain, new Position(0, 0, 0));
+
+  private final DefaultDriveCommand m_teleop =       
+  new DefaultDriveCommand(
+    m_drivetrain, 
+    () -> deadband(-m_controller.getLeftY(), CONTROLLER_DEADBAND), 
+    () -> deadband(m_controller.getLeftX(), CONTROLLER_DEADBAND), 
+    () -> deadband(m_controller.getRightX(), CONTROLLER_DEADBAND)
+  );
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_drivetrain.setDefaultCommand(    
-      new DefaultDriveCommand(
-        m_drivetrain, 
-        () -> deadband(-m_controller.getLeftY(), CONTROLLER_DEADBAND), 
-        () -> deadband(m_controller.getLeftX(), CONTROLLER_DEADBAND), 
-        () -> deadband(m_controller.getRightX(), CONTROLLER_DEADBAND)
-      )
+      m_teleop
     );
 
     configureButtonBindings();
 
-    m_drivetrain.tab.addNumber("Left stick X", () -> m_controller.getLeftX());
-    m_drivetrain.tab.addNumber("Left stick Y", () -> m_controller.getLeftY());
-    m_drivetrain.tab.addNumber("Right stick X", () -> m_controller.getRightX());
+    m_drivetrain.tab.addNumber("Left stick X", () -> m_controller.getLeftX()).withSize(1, 1).withPosition(4, 2);
+    m_drivetrain.tab.addNumber("Left stick Y", () -> m_controller.getLeftY()).withSize(1, 1).withPosition(5, 2);
+    m_drivetrain.tab.addNumber("Right stick X", () -> m_controller.getRightX()).withSize(1, 1).withPosition(4, 3);
+
+    m_drivetrain.tab.addNumber("Drive Mode", () -> m_teleop.getMode()).withSize(1, 1).withPosition(5, 3);
+
+    m_drivetrain.tab.addCamera("Limelight", "Limelight", "http://10.22.20.45:5800").withSize(3, 2).withPosition(4, 0);
   }
 
   /**
@@ -58,6 +67,8 @@ public class RobotContainer {
     new Button(m_controller::getRightBumper).whenPressed(m_drivetrain::increaseSpeed);
     new Button(m_controller::getStartButton).whenPressed(m_drivetrain::resetSpeed);
     new Button(m_controller::getAButton).whenPressed(m_drivetrain::stopRobot);
+
+    new Button(m_controller::getYButton).whenPressed(m_teleop::changeMode);
   }
 
   /**

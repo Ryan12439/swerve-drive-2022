@@ -33,12 +33,12 @@ public class Odemetry {
         double rot2 = (c - d) / w;
         double rot = (rot1 + rot2) / 2;
 
-        double fwd1 = rot * (l) + a;
-        double fwd2 = -rot * (l) + b;
+        double fwd1 = rot * (l / 2) + a;
+        double fwd2 = -rot * (l / 2) + b;
         double fwd = (fwd1 + fwd2) / 2;
 
-        double str1 = rot * (w) + c;
-        double str2 = -rot * (w) + d;
+        double str1 = rot * (w / 2) + c;
+        double str2 = -rot * (w / 2) + d;
         double str = (str1 + str2) / 2;
 
         DriveDirection out = new DriveDirection(str, fwd, 0, gyro, true);

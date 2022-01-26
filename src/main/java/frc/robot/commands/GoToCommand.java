@@ -6,58 +6,53 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.drivetrain.DriveDirection;
+import frc.robot.subsystems.drivetrain.Position;
+import frc.robot.subsystems.drivetrain.PositionFinder;
 import frc.robot.subsystems.drivetrain.WheelsState;
-
-import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class DefaultDriveCommand extends CommandBase {
+public class GoToCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Drivetrain drivetrain;
-  private final DoubleSupplier fwdSupplier;
-  private final DoubleSupplier strSupplier;
-  private final DoubleSupplier rotSupplier;
+  private PositionFinder endPos;
   private DriveDirection driveDir;
   private WheelsState wheelsState;
 
-  private int mode;
+  private DriveDirection goDir;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DefaultDriveCommand(Drivetrain drivetrain, DoubleSupplier fwd, DoubleSupplier str, DoubleSupplier rot) {
+  public GoToCommand(Drivetrain drivetrain, Position position) {
     this.drivetrain = drivetrain;
-    fwdSupplier = fwd;
-    strSupplier = str;
-    rotSupplier = rot;
+    endPos = new PositionFinder(position);
     
     addRequirements(drivetrain);
-
-    mode = 0;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivetrain.setSpeed(0.5);
+    drivetrain.setSpeed(0.6);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    goDir = endPos.getDirection(drivetrain.getPosition());
+
     driveDir = new DriveDirection(
-      fwdSupplier.getAsDouble(), 
-      strSupplier.getAsDouble(), 
-      rotSupplier.getAsDouble(), 
+      goDir.getFwd(),  
+      goDir.getStr(), 
+      goDir.getRot(), 
       drivetrain.getGyro()
     );
 
-    if (mode == 0)
-      driveDir.zero();
+    driveDir.zero();
 
     wheelsState = new WheelsState(driveDir);
 
@@ -73,15 +68,6 @@ public class DefaultDriveCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-  }
-
-  public void changeMode() {
-    mode += 1;
-    mode %= 2;
-  }
-
-  public int getMode() {
-    return mode;
+    return endPos.isDone();
   }
 }

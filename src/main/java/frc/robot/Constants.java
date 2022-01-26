@@ -81,7 +81,10 @@ public final class Constants {
 
 
     // Controller settings
-    public static final double CONTROLLER_DEADBAND = 0.1;
+    public static final double CONTROLLER_DEADBAND = 0.15;
+
+    // Max Decel
+    public static final double MAX_DECELERATION = 0.99;
 
     // Wheel Diameter
     public static final double WHEEL_DIAMETER = SdsModuleConfigurations.MK4_L2.getWheelDiameter();

@@ -13,7 +13,7 @@ public class WheelsState {
      */
     public WheelsState(DriveDirection in) {
         double fwd = in.getFwd();
-        double str = in.getStr();;
+        double str = in.getStr();
         double rot = in.getRot();
 
         double a = str - rot * (DRIVETRAIN_LENGTH_METERS / DRIVETRAIN_DIAMETER);
@@ -101,6 +101,12 @@ public class WheelsState {
         double[] speedsNew = this.getSpeeds();
 
         for (int i = 0; i < 4; i++) {
+            if (speedsNew[i] < 0.02) {
+                anglesNew[i] = angles[i];
+                speedsNew[i] = 0;
+                continue;
+            }
+
             angles[i] += Math.PI;
             anglesNew[i] += Math.PI;
             

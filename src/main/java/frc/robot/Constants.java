@@ -88,4 +88,12 @@ public final class Constants {
 
     // Wheel Diameter
     public static final double WHEEL_DIAMETER = SdsModuleConfigurations.MK4_L2.getWheelDiameter();
+
+
+    // Max Drive Constraints
+    public static final boolean CONSTRAINT_ENABLED = true;
+    public static final double X_CONSTRAINT_OFFSET = 1;
+    public static final double Y_CONSTRAINT_OFFSET = 2;
+
+
 }

@@ -90,6 +90,10 @@ public class RobotContainer {
     return m_autoCommand;
   }
 
+  public Drivetrain getDrivetrain() {
+    return m_drivetrain;
+  }
+
   private static double deadband(double value, double deadband) {
     if (Math.abs(value) > deadband) {
       if (value > 0.0) {

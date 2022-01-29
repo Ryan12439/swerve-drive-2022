@@ -87,6 +87,14 @@ public class DriveDirection {
         return facing;
     }
 
+    public void setStr(double x) {
+        str = x;
+    }
+
+    public void setFwd(double y) {
+        fwd = y;
+    }
+
     /**
      * Zeros the facing of the movement. Useful for field centric driving.
      */

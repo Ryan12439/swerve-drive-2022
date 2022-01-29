@@ -6,11 +6,14 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.drivetrain.DriveDirection;
+import frc.robot.subsystems.drivetrain.Position;
 import frc.robot.subsystems.drivetrain.WheelsState;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
+import static frc.robot.Constants.*;
 
 /** An example command that uses an example subsystem. */
 public class DefaultDriveCommand extends CommandBase {
@@ -55,6 +58,31 @@ public class DefaultDriveCommand extends CommandBase {
       rotSupplier.getAsDouble(), 
       drivetrain.getGyro()
     );
+    
+    if (CONSTRAINT_ENABLED) {
+      int xBarrier = xBarrier(drivetrain.getPosition());
+      if (xBarrier == 1) {
+        if (driveDir.getStr() > 0)
+          driveDir.setStr(-0.05);
+      }
+
+      if (xBarrier == -1) {
+        if (driveDir.getStr() < 0)
+          driveDir.setStr(0.05);
+      }
+
+
+      int yBarrier = yBarrier(drivetrain.getPosition());
+      if (yBarrier == 1) {
+        if (driveDir.getFwd() > 0)
+          driveDir.setFwd(-0.05);
+      }
+
+      if (yBarrier == -1) {
+        if (driveDir.getFwd() < 0)
+          driveDir.setFwd(0.05);
+      }
+    }
 
     if (mode == 0)
       driveDir.zero();
@@ -79,6 +107,22 @@ public class DefaultDriveCommand extends CommandBase {
   public void changeMode() {
     mode += 1;
     mode %= 2;
+  }
+
+  public int xBarrier(Position current) {
+    if (current.getPos()[0] > X_CONSTRAINT_OFFSET)
+      return 1;
+    else if (current.getPos()[0] < -X_CONSTRAINT_OFFSET)
+      return -1;
+    return 0;
+  }
+
+  public int yBarrier(Position current) {
+    if (current.getPos()[1] > Y_CONSTRAINT_OFFSET)
+      return 1;
+    else if (current.getPos()[1] < -Y_CONSTRAINT_OFFSET)
+      return -1;
+    return 0;
   }
 
   public int getMode() {

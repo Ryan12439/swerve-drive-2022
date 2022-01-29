@@ -134,6 +134,10 @@ public class Drivetrain extends SubsystemBase {
     );
   }
 
+  public DriveDirection currentTheoryDrive() {
+    return Odemetry.getOdemetry(wheelsCurrent, getGyro());
+  }
+
   public Position getPosition() {
     return currentPos;
   }

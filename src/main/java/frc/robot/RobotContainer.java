@@ -69,6 +69,15 @@ public class RobotContainer {
     new Button(m_controller::getAButton).whenPressed(m_drivetrain::stopRobot);
 
     new Button(m_controller::getYButton).whenPressed(m_teleop::changeMode);
+
+    new Button(m_controller::getXButton).whenPressed(m_autoCommand);
+    new Button(() -> m_controller.getPOV() == 180).whenPressed(new GoToCommand(m_drivetrain, new Position(1, 1, Math.PI)));
+
+    new Button(() -> {
+      return deadband(-m_controller.getLeftY(), CONTROLLER_DEADBAND) + 
+      deadband(-m_controller.getLeftX(), CONTROLLER_DEADBAND) + 
+      deadband(-m_controller.getRightX(), CONTROLLER_DEADBAND) > 0;
+    }).whenPressed(m_teleop);
   }
 
   /**

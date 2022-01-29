@@ -11,26 +11,36 @@ public class PositionFinder {
 
     private int finish;
 
-    public PositionFinder(Position in) {
+    private VelocityControl vControl;
+
+    public PositionFinder(Position in, Position currentPos, DriveDirection currentVel) {
         xController = new PIDController(ShuffleboardPID.axisP.getDouble(0), ShuffleboardPID.axisI.getDouble(0), ShuffleboardPID.axisD.getDouble(0));
         yController = new PIDController(ShuffleboardPID.axisP.getDouble(0), ShuffleboardPID.axisI.getDouble(0), ShuffleboardPID.axisD.getDouble(0));
         rController = new PIDController(ShuffleboardPID.rotP.getDouble(0), ShuffleboardPID.rotI.getDouble(0), ShuffleboardPID.rotD.getDouble(0));
+
+        rController.enableContinuousInput(-Math.PI, Math.PI);
 
         double set[] = in.getPos();
         x = set[0];
         y = set[1];
         rot = set[2];
+
+        vControl = new VelocityControl(in, currentPos, currentVel);
     }
     
-    public DriveDirection getDirection(Position currentPos) {
+    public DriveDirection getDirection(Position currentPos, DriveDirection currentVel) {
         double current[] = currentPos.getPos();
 
         xController.setPID(ShuffleboardPID.axisP.getDouble(0), ShuffleboardPID.axisI.getDouble(0), ShuffleboardPID.axisD.getDouble(0));
         yController.setPID(ShuffleboardPID.axisP.getDouble(0), ShuffleboardPID.axisI.getDouble(0), ShuffleboardPID.axisD.getDouble(0));
         rController.setPID(ShuffleboardPID.rotP.getDouble(0), ShuffleboardPID.rotI.getDouble(0), ShuffleboardPID.rotD.getDouble(0));
 
-        double xOut = xController.calculate(current[0], x);
-        double yOut = yController.calculate(current[1], y);
+        Position goTo = vControl.getNextPos(currentPos, currentVel);
+
+        double next[] = goTo.getPos();
+
+        double xOut = xController.calculate(current[0], next[0]);
+        double yOut = yController.calculate(current[1], next[1]);
         double rOut = rController.calculate(current[2], rot);
 
         return new DriveDirection(yOut, xOut, rOut, current[2]);

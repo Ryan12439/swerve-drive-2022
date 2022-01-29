@@ -29,7 +29,7 @@ public class GoToCommand extends CommandBase {
    */
   public GoToCommand(Drivetrain drivetrain, Position position) {
     this.drivetrain = drivetrain;
-    endPos = new PositionFinder(position);
+    endPos = new PositionFinder(position, drivetrain.getPosition(), drivetrain.currentTheoryDrive());
     
     addRequirements(drivetrain);
   }
@@ -37,13 +37,13 @@ public class GoToCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivetrain.setSpeed(0.6);
+    drivetrain.setSpeed(0.4);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    goDir = endPos.getDirection(drivetrain.getPosition());
+    goDir = endPos.getDirection(drivetrain.getPosition(), drivetrain.currentTheoryDrive());
 
     driveDir = new DriveDirection(
       goDir.getFwd(),  

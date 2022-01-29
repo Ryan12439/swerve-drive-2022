@@ -1,9 +1,6 @@
 package frc.robot.subsystems.drivetrain;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class PositionFinder {
     private PIDController xController;
@@ -14,38 +11,10 @@ public class PositionFinder {
 
     private int finish;
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("PID");
-
-    private NetworkTableEntry axisP = tab.add("axisP", 0.25)
-        .withSize(1, 1)
-        .withPosition(0, 0)
-        .getEntry();
-    private NetworkTableEntry axisI = tab.add("axisI", 0)
-        .withSize(1, 1)
-        .withPosition(0, 1)
-        .getEntry();
-    private NetworkTableEntry axisD = tab.add("axisD", 0)
-        .withSize(1, 1)
-        .withPosition(0, 2)
-        .getEntry();
-
-    private NetworkTableEntry rotP = tab.add("rotP", 0.25)
-        .withSize(1, 1)
-        .withPosition(1, 0)
-        .getEntry();
-    private NetworkTableEntry rotI = tab.add("rotI", 0)
-        .withSize(1, 1)
-        .withPosition(1, 1)
-        .getEntry();
-    private NetworkTableEntry rotD = tab.add("rotD", 0)
-        .withSize(1, 1)
-        .withPosition(1, 2)
-        .getEntry();
-
     public PositionFinder(Position in) {
-        xController = new PIDController(axisP.getDouble(0), axisI.getDouble(0), axisD.getDouble(0));
-        yController = new PIDController(axisP.getDouble(0), axisI.getDouble(0), axisD.getDouble(0));
-        rController = new PIDController(rotP.getDouble(0), rotI.getDouble(0), rotD.getDouble(0));
+        xController = new PIDController(ShuffleboardPID.axisP.getDouble(0), ShuffleboardPID.axisI.getDouble(0), ShuffleboardPID.axisD.getDouble(0));
+        yController = new PIDController(ShuffleboardPID.axisP.getDouble(0), ShuffleboardPID.axisI.getDouble(0), ShuffleboardPID.axisD.getDouble(0));
+        rController = new PIDController(ShuffleboardPID.rotP.getDouble(0), ShuffleboardPID.rotI.getDouble(0), ShuffleboardPID.rotD.getDouble(0));
 
         double set[] = in.getPos();
         x = set[0];
@@ -56,9 +25,9 @@ public class PositionFinder {
     public DriveDirection getDirection(Position currentPos) {
         double current[] = currentPos.getPos();
 
-        xController.setPID(axisP.getDouble(0), axisI.getDouble(0), axisD.getDouble(0));
-        yController.setPID(axisP.getDouble(0), axisI.getDouble(0), axisD.getDouble(0));
-        rController.setPID(rotP.getDouble(0), rotI.getDouble(0), rotD.getDouble(0));
+        xController.setPID(ShuffleboardPID.axisP.getDouble(0), ShuffleboardPID.axisI.getDouble(0), ShuffleboardPID.axisD.getDouble(0));
+        yController.setPID(ShuffleboardPID.axisP.getDouble(0), ShuffleboardPID.axisI.getDouble(0), ShuffleboardPID.axisD.getDouble(0));
+        rController.setPID(ShuffleboardPID.rotP.getDouble(0), ShuffleboardPID.rotI.getDouble(0), ShuffleboardPID.rotD.getDouble(0));
 
         double xOut = xController.calculate(current[0], x);
         double yOut = yController.calculate(current[1], y);

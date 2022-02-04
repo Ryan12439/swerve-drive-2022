@@ -91,7 +91,7 @@ public final class Constants {
 
 
     // Max Drive Constraints
-    public static final boolean CONSTRAINT_ENABLED = true;
+    public static final boolean CONSTRAINT_ENABLED = false;
     public static final double X_CONSTRAINT_OFFSET = 1;
     public static final double Y_CONSTRAINT_OFFSET = 2;
 

@@ -7,9 +7,7 @@ public class PositionFinder {
     private PIDController yController;
     private PIDController rController;
 
-    private double x, y, rot;
-
-    private int finish;
+    private double rot;
 
     private VelocityControl vControl;
 
@@ -21,8 +19,6 @@ public class PositionFinder {
         rController.enableContinuousInput(-Math.PI, Math.PI);
 
         double set[] = in.getPos();
-        x = set[0];
-        y = set[1];
         rot = set[2];
 
         vControl = new VelocityControl(in, currentPos, currentVel);
@@ -52,11 +48,6 @@ public class PositionFinder {
             yController.atSetpoint() &&
             rController.atSetpoint();
 
-        if (done)
-            finish++;
-        else
-            finish = 0;
-        
-        return done && (finish > 20);
+        return done;
     }
 }

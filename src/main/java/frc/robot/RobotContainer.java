@@ -25,7 +25,14 @@ public class RobotContainer {
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final XboxController m_controller = new XboxController(0);
 
-  private final GoToCommand m_autoCommand = new GoToCommand(m_drivetrain, new Position(0, 0, 0));
+  private final GoToCommand m_autoCommand[] = {
+    new GoToCommand(m_drivetrain, new Position(0, 0, 0)),
+    new GoToCommand(m_drivetrain, new Position(0.5, 0.5, 0)),
+    new GoToCommand(m_drivetrain, new Position(-0.5, 0.5, 0)),
+    new GoToCommand(m_drivetrain, new Position(-0.5, -0.5, 0)),
+    new GoToCommand(m_drivetrain, new Position(0.5, -0.5, 0)),
+    new GoToCommand(m_drivetrain, new Position(0, 0, 0))
+  };
 
   private final DefaultDriveCommand m_teleop =       
   new DefaultDriveCommand(
@@ -70,7 +77,7 @@ public class RobotContainer {
 
     new Button(m_controller::getYButton).whenPressed(m_teleop::changeMode);
 
-    new Button(m_controller::getXButton).whenPressed(m_autoCommand);
+    new Button(m_controller::getXButton).whenPressed(m_autoCommand[0]);
     new Button(() -> m_controller.getPOV() == 180).whenPressed(new GoToCommand(m_drivetrain, new Position(1, 1, Math.PI)));
 
     new Button(() -> {
@@ -85,7 +92,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  public Command[] getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
   }

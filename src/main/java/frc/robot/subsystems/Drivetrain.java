@@ -38,6 +38,8 @@ public class Drivetrain extends SubsystemBase {
   private Position currentPos;
   private double timeSinceLastCheck;
 
+  private double oldGyro = 0;
+
   /** Creates a new DrivetrainSubsystem. */
   public Drivetrain() {
     wheelsCurrent = new WheelsState(
@@ -123,14 +125,16 @@ public class Drivetrain extends SubsystemBase {
   public void updateOdo() {
     double time = Timer.getFPGATimestamp() - timeSinceLastCheck;
     timeSinceLastCheck = Timer.getFPGATimestamp();
-    DriveDirection in = Odemetry.getOdemetry(getPos(), getGyro());
+    double gyro = getGyro();
+    DriveDirection in = Odemetry.getOdemetry(getPos(), gyro, oldGyro, time);
+    oldGyro = gyro;
 
     in.zero();
 
     currentPos.addPos(
       -in.getStr() * MAX_VELOCITY_METERS_PER_SECOND * time, 
       in.getFwd() * MAX_VELOCITY_METERS_PER_SECOND * time, 
-      getGyro()
+      gyro
     );
   }
 

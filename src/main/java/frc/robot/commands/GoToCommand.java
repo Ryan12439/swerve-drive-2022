@@ -43,7 +43,7 @@ public class GoToCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    goDir = endPos.getDirection(drivetrain.getPosition(), drivetrain.currentTheoryDrive());
+    goDir = endPos.getDirection(drivetrain.getPosition());
 
     driveDir = new DriveDirection(
       goDir.getFwd(),  

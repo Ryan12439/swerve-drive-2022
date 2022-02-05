@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.GoToCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -42,6 +44,8 @@ public class RobotContainer {
     () -> deadband(m_controller.getRightX(), CONTROLLER_DEADBAND)
   );
 
+  private final ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_drivetrain.setDefaultCommand(    
@@ -56,7 +60,7 @@ public class RobotContainer {
 
     m_drivetrain.tab.addNumber("Drive Mode", () -> m_teleop.getMode()).withSize(1, 1).withPosition(5, 3);
 
-    m_drivetrain.tab.addCamera("Limelight", "Limelight", "http://10.22.20.45:5800").withSize(3, 2).withPosition(4, 0);
+    tab.addCamera("Limelight", "Limelight", "http://10.22.20.45:5800").withSize(9, 4).withPosition(0, 0);
   }
 
   /**
@@ -77,7 +81,7 @@ public class RobotContainer {
 
     new Button(m_controller::getYButton).whenPressed(m_teleop::changeMode);
 
-    new Button(m_controller::getXButton).whenPressed(m_autoCommand[0]);
+    new Button(m_controller::getXButton).whenPressed(new GoToCommand(m_drivetrain, new Position(0, 0, 0)));
     new Button(() -> m_controller.getPOV() == 180).whenPressed(new GoToCommand(m_drivetrain, new Position(1, 1, Math.PI)));
 
     new Button(() -> {

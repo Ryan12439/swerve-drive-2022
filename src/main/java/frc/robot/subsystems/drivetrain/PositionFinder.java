@@ -24,14 +24,14 @@ public class PositionFinder {
         vControl = new VelocityControl(in, currentPos, currentVel);
     }
     
-    public DriveDirection getDirection(Position currentPos, DriveDirection currentVel) {
+    public DriveDirection getDirection(Position currentPos) {
         double current[] = currentPos.getPos();
 
         xController.setPID(ShuffleboardPID.axisP.getDouble(0), ShuffleboardPID.axisI.getDouble(0), ShuffleboardPID.axisD.getDouble(0));
         yController.setPID(ShuffleboardPID.axisP.getDouble(0), ShuffleboardPID.axisI.getDouble(0), ShuffleboardPID.axisD.getDouble(0));
         rController.setPID(ShuffleboardPID.rotP.getDouble(0), ShuffleboardPID.rotI.getDouble(0), ShuffleboardPID.rotD.getDouble(0));
 
-        Position goTo = vControl.getNextPos(currentPos, currentVel);
+        Position goTo = vControl.getNextPos(currentPos);
 
         double next[] = goTo.getPos();
 
@@ -47,6 +47,8 @@ public class PositionFinder {
             xController.atSetpoint() &&
             yController.atSetpoint() &&
             rController.atSetpoint();
+
+        System.out.println(done);
 
         return done;
     }

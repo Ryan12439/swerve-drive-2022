@@ -33,7 +33,7 @@ public class VelocityControl {
         timeSinceLastCheck = Timer.getFPGATimestamp();
     }
 
-    public Position getNextPos(Position current, DriveDirection currentVel) {
+    public Position getNextPos(Position current) {
         double time = (Timer.getFPGATimestamp() - timeSinceLastCheck);
 
         double in[] = current.getPos();

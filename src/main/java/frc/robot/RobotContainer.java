@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.commands.ColorSensorCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.GoToCommand;
+import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.drivetrain.Position;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -46,6 +48,9 @@ public class RobotContainer {
 
   private final ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
 
+  private ColorSensor m_cSensor;
+  private Command m_colorSensorCommand;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_drivetrain.setDefaultCommand(    
@@ -61,6 +66,9 @@ public class RobotContainer {
     m_drivetrain.tab.addNumber("Drive Mode", () -> m_teleop.getMode()).withSize(1, 1).withPosition(5, 3);
 
     tab.addCamera("Limelight", "Limelight", "http://10.22.20.45:5800").withSize(9, 4).withPosition(0, 0);
+
+    m_cSensor = new ColorSensor();
+    m_colorSensorCommand = new ColorSensorCommand(m_cSensor);
   }
 
   /**

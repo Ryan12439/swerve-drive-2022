@@ -2,6 +2,9 @@ package frc.robot.subsystems.drivetrain;
 
 import static frc.robot.Constants.*;
 
+/**
+ * Code to estimate change in position over time
+ */
 public class Odemetry {
     public static DriveDirection getOdemetry(WheelsState currentState, double gyro, double oldGyro, double time) {
         // FR, FL, BR, BL

@@ -21,6 +21,10 @@ import frc.robot.subsystems.drivetrain.WheelsState;
 
 import static frc.robot.Constants.*;
 
+/**
+ * Code for controlling and monitoring the swerve drive
+ * @see com.swervedrivespecialties.swervelib
+ */
 public class Drivetrain extends SubsystemBase {
   private final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200);
 
@@ -100,6 +104,10 @@ public class Drivetrain extends SubsystemBase {
     tab.addNumber("Y calc", () -> currentPos.getPos()[1]).withSize(1, 1).withPosition(6, 3);
   }
 
+  /**
+   * Get the position of the navX gyroscope.
+   * @return Gyroscope Z axis angle in degrees
+   */
   public double getGyro() {
     return Math.toRadians(m_navx.getAngle());
   }
@@ -108,6 +116,10 @@ public class Drivetrain extends SubsystemBase {
     wheelsCurrent = in;
   }
 
+  /**
+   * Get the current state of the wheels
+   * @return Current WheelState object
+   */
   public WheelsState getPos() {
     double frA = m_frontRightModule.getSteerAngle();
     double flA = m_frontLeftModule.getSteerAngle();
@@ -122,6 +134,9 @@ public class Drivetrain extends SubsystemBase {
     return new WheelsState(frA, flA, brA, blA, frS, flS, brS, blS);
   }
 
+  /**
+   * Update the odometry
+   */
   public void updateOdo() {
     double time = Timer.getFPGATimestamp() - timeSinceLastCheck;
     timeSinceLastCheck = Timer.getFPGATimestamp();
@@ -142,35 +157,62 @@ public class Drivetrain extends SubsystemBase {
     return Odemetry.getOdemetry(wheelsCurrent, getGyro());
   }
 
+  /**
+   * Get the current position of the robot
+   * @return Position object
+   */
   public Position getPosition() {
     return currentPos;
   }
 
+  /**
+   * Zero the navX gyroscope Z axis (yaw)
+   */
   public void zeroGyroscope() {
     m_navx.zeroYaw();
     currentPos = new Position(0, 0, 0);
   }
 
+  /**
+   * Decrease the speed
+   * NewSpeed = CurrentSpeed/1.1
+   * Minimum speed = 0.1
+   */
   public void decreaseSpeed() {
     speedModifier /= 1.1;
     if (speedModifier < 0.1)
       speedModifier = 0.1;
   }
 
+  /**
+   * Increase the speed
+   * NewSpeed = CurrentSpeed*1.1
+   * Maximum speed = 1
+   */
   public void increaseSpeed() {
     speedModifier *= 1.1;
     if (speedModifier > 1)
       speedModifier = 1;
   }
 
+  /**
+   * Reset the speed to 1
+   */
   public void resetSpeed() {
     speedModifier = 1;
   }
 
+  /**
+   * Stop the robot by setting the speed to 0
+   */
   public void stopRobot() {
     speedModifier = 0;
   }
 
+  /**
+   * Set the speed
+   * @param speed Speed percentage as a double (ex. 50% -> 0.5)
+   */
   public void setSpeed(double speed) {
     if (speed >= 0 && speed <= 1)
       speedModifier = speed;

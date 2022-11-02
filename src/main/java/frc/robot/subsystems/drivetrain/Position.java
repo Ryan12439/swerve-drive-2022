@@ -14,7 +14,7 @@ public class Position {
         this.y += y;
         this.rot = rot;
     }
-
+    
     public double[] getPos() {
         double out[] = {x, y, rot};
         return out;
